@@ -99,16 +99,13 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
  
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
     const {title, releaseDate, genre, actors } = req.body;
-    //check if title in the request body
     if (!title) {
         return res.status(400).json({ error: 'Title is required' });
     }
-    //create new Movie object and save it to the database
     const newMovie = new Movie({ title, releaseDate, genre, actors });
  
     newMovie.save()
         .then(savedMovie => {
-            //send the newly saved movie with success response
             res.status(200).json(savedMovie);
         });
 });
@@ -116,11 +113,9 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
 router.put('/movies/:title', authJwtController.isAuthenticated, (req, res) => {
     const { title } = req.params;
     const { releaseDate, genre, actors } = req.body;
-    //check if title in the request parameters
         if (!title) {
             return res.status(400).json({ error: 'Title is required' });
         }
-    //find movie from title and update it in the database
     Movie.findOneAndUpdate({ title: title }, { releaseDate, genre, actors }, { new: true })
         .then(updatedMovie => {
             res.status(200).json(updatedMovie);
@@ -130,7 +125,6 @@ router.put('/movies/:title', authJwtController.isAuthenticated, (req, res) => {
  
 router.delete('/movies/:title', authJwtController.isAuthenticated, (req, res) => {
     const { title } = req.params;
-    //check if title in request parameters
     if (!title) {
         return res.status(400).json({ error: 'Title is required' });
     }
